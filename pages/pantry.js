@@ -6,29 +6,14 @@ import IngredientSearch from '../components/IngredientSearch';
 import PantryIngredients from '../components/PantryIngredients';
 import RecipeSearch from '../components/RecipeSearch';
 import SearchResults from '../components/SearchResults';
+import usePantryIngredients from '../hooks/usePantryIngredients';
 import styles from './pantry.module.css';
-
-// pantry to use for testing!
-const defaultPantry = {
-    1001: { id: 1001, name: 'butter', image: 'butter-sliced.jpg' },
-    1077: { id: 1077, name: 'milk', image: 'milk.png' },
-    1253: { id: 1253, name: 'american cheese', image: 'american-cheese.jpg' },
-    6159: { id: 6159, name: 'tomato soup', image: 'tomato-soup.png' },
-    11215: { id: 11215, name: 'garlic', image: 'garlic.png' },
-    11529: { id: 11529, name: 'tomato', image: 'tomato.png' },
-    18064: { id: 18064, name: 'bread', image: 'white-bread.jpg' },
-    20581: {
-        id: 20581,
-        name: 'unbleached all purpose flour',
-        image: 'flour.png',
-    },
-};
 
 export default function Pantry() {
     const [ingredient, setIngredient] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [recipeSearchResults, setRecipeSearchResults] = useState([]);
-    const [pantryIngredients, setPantryIngredients] = useState(defaultPantry);
+    const {pantryIngredients, setPantryIngredients} = usePantryIngredients();
     const _isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
 
     function handleIngredientChange(e) {
@@ -115,7 +100,7 @@ export default function Pantry() {
                 handleIngredientChange={handleIngredientChange}
                 handleIngredientSearch={handleIngredientSearch}
             />
-            <RecipeSearch handleRecipeSearch={handleRecipeSearch} />
+            
             <SearchResults
                 _isInPantry={_isInPantry}
                 handleAddToPantry={handleAddToPantry}

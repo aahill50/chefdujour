@@ -10,6 +10,7 @@ export default function PantryIngredients({
 }) {
     return (
         <>
+        <h2>Items in Pantry:</h2>
             <ul>
                 {Object.entries(pantryIngredients).map(
                     ([ingredientId, ingredient]) => {
