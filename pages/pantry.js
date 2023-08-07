@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import utils from '../utils';
 import ManagePantryIngredient from '../components/ManagePantryIngredient';
+import Ingredient from '../components/Ingredient';
+import IngredientSearch from '../components/IngredientSearch';
+import PantryIngredients from '../components/PantryIngredients';
+import RecipeSearch from '../components/RecipeSearch';
+import SearchResults from '../components/SearchResults';
 import styles from './pantry.module.css';
 
 // pantry to use for testing!
@@ -18,119 +23,6 @@ const defaultPantry = {
         image: 'flour.png',
     },
 };
-
-function Ingredient({ classname, ingredient }) {
-    return (
-        <div>
-            <img
-                className={classname}
-                src={utils.ingredientImage(ingredient.image)}
-            />
-            {ingredient.name}
-        </div>
-    );
-}
-
-function PantryIngredients({
-    handleAddToPantry,
-    handleRemoveFromPantry,
-    pantryIngredients,
-    _isInPantry,
-}) {
-    return (
-        <>
-            <ul>
-                {Object.entries(pantryIngredients).map(
-                    ([ingredientId, ingredient]) => {
-                        return (
-                            <li key={ingredientId}>
-                                <Ingredient
-                                    classname={styles.ingredientImage}
-                                    ingredient={ingredient}
-                                />
-                                <ManagePantryIngredient
-                                    handleAddToPantry={handleAddToPantry}
-                                    handleRemoveFromPantry={
-                                        handleRemoveFromPantry
-                                    }
-                                    ingredient={ingredient}
-                                    isInPantry={_isInPantry(ingredient)}
-                                />
-                            </li>
-                        );
-                    }
-                )}
-            </ul>
-            {JSON.stringify(pantryIngredients)}
-        </>
-    );
-}
-
-function SearchResults({
-    _isInPantry,
-    handleAddToPantry,
-    handleRemoveFromPantry,
-    pantryIngredients,
-    results = [],
-}) {
-    return (
-        <ul>
-            {results.map((result) => {
-                return (
-                    <li
-                        className={styles.searchResult}
-                        key={
-                            _isInPantry(result)
-                                ? `in-pantry-${result.id}`
-                                : result.id
-                        }
-                    >
-                        <Ingredient
-                            classname={styles.ingredientImage}
-                            ingredient={result}
-                        />
-                        <ManagePantryIngredient
-                            handleAddToPantry={handleAddToPantry}
-                            handleRemoveFromPantry={handleRemoveFromPantry}
-                            ingredient={result}
-                            isInPantry={_isInPantry(result)}
-                        />
-                    </li>
-                );
-            })}
-        </ul>
-    );
-}
-
-function IngredientSearch({
-    ingredient,
-    handleIngredientChange,
-    handleIngredientSearch,
-}) {
-    return (
-        <>
-            <input
-                type='text'
-                name='ingredient'
-                value={ingredient}
-                onChange={handleIngredientChange}
-            />
-            <button onClick={handleIngredientSearch}>
-                Search for ingredient
-            </button>
-        </>
-    );
-}
-
-function RecipeSearch({ handleRecipeSearch }) {
-    return (
-        <>
-            <button onClick={handleRecipeSearch}>
-                Search for recipes based on your ingredients!
-            </button>
-        </>
-    );
-}
 
 export default function Pantry() {
     const [ingredient, setIngredient] = useState('');
