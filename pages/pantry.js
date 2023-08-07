@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import utils from '../utils';
+import ManagePantryIngredient from '../components/ManagePantryIngredient';
 import styles from './pantry.module.css';
 
 // pantry to use for testing!
@@ -52,21 +53,13 @@ function PantryIngredients({ pantryIngredients }) {
     );
 }
 
-function AddToPantry({ handleAddToPantry, ingredient, pantryIngredients }) {
-    const isInPantry = !!pantryIngredients[ingredient.id];
-
-    return (
-        <button
-            className={styles.addToPantry}
-            onClick={(e) => handleAddToPantry(e, ingredient)}
-        >
-            Add to Pantry
-        </button>
-    );
-}
-
-function SearchResults({ handleAddToPantry, pantryIngredients, results = [] }) {
-    const isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
+function SearchResults({
+    handleAddToPantry,
+    handleRemoveFromPantry,
+    pantryIngredients,
+    results = [],
+}) {
+    const _isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
     return (
         <ul>
             {results.map((result) => {
@@ -74,7 +67,7 @@ function SearchResults({ handleAddToPantry, pantryIngredients, results = [] }) {
                     <li
                         className={styles.searchResult}
                         key={
-                            isInPantry(result)
+                            _isInPantry(result)
                                 ? `in-pantry-${result.id}`
                                 : result.id
                         }
@@ -83,15 +76,12 @@ function SearchResults({ handleAddToPantry, pantryIngredients, results = [] }) {
                             classname={styles.ingredientImage}
                             ingredient={result}
                         />
-                        {isInPantry(result) ? (
-                            <span>In Pantry</span>
-                        ) : (
-                            <AddToPantry
-                                handleAddToPantry={handleAddToPantry}
-                                ingredient={result}
-                                pantryIngredients={pantryIngredients}
-                            />
-                        )}
+                        <ManagePantryIngredient
+                            handleAddToPantry={handleAddToPantry}
+                            handleRemoveFromPantry={handleRemoveFromPantry}
+                            ingredient={result}
+                            isInPantry={_isInPantry(result)}
+                        />
                     </li>
                 );
             })}
@@ -192,9 +182,22 @@ export default function Pantry() {
 
     function handleAddToPantry(e, ingredientToAdd) {
         e.preventDefault();
+        
         setPantryIngredients({
             ...pantryIngredients,
             [ingredientToAdd.id]: ingredientToAdd,
+        });
+    }
+
+    function handleRemoveFromPantry(e, ingredient) {
+        e.preventDefault();
+
+        setPantryIngredients((s) => {
+            const {
+                [ingredient.id]: {},
+                ...pantryIngredients
+            } = s;
+            return { ...pantryIngredients };
         });
     }
 
@@ -209,6 +212,7 @@ export default function Pantry() {
             <RecipeSearch handleRecipeSearch={handleRecipeSearch} />
             <SearchResults
                 handleAddToPantry={handleAddToPantry}
+                handleRemoveFromPantry={handleRemoveFromPantry}
                 pantryIngredients={pantryIngredients}
                 results={searchResults}
             />
