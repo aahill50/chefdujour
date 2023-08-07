@@ -31,7 +31,12 @@ function Ingredient({ classname, ingredient }) {
     );
 }
 
-function PantryIngredients({ pantryIngredients }) {
+function PantryIngredients({
+    handleAddToPantry,
+    handleRemoveFromPantry,
+    pantryIngredients,
+    _isInPantry,
+}) {
     return (
         <>
             <ul>
@@ -42,6 +47,14 @@ function PantryIngredients({ pantryIngredients }) {
                                 <Ingredient
                                     classname={styles.ingredientImage}
                                     ingredient={ingredient}
+                                />
+                                <ManagePantryIngredient
+                                    handleAddToPantry={handleAddToPantry}
+                                    handleRemoveFromPantry={
+                                        handleRemoveFromPantry
+                                    }
+                                    ingredient={ingredient}
+                                    isInPantry={_isInPantry(ingredient)}
                                 />
                             </li>
                         );
@@ -54,12 +67,12 @@ function PantryIngredients({ pantryIngredients }) {
 }
 
 function SearchResults({
+    _isInPantry,
     handleAddToPantry,
     handleRemoveFromPantry,
     pantryIngredients,
     results = [],
 }) {
-    const _isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
     return (
         <ul>
             {results.map((result) => {
@@ -124,6 +137,7 @@ export default function Pantry() {
     const [searchResults, setSearchResults] = useState([]);
     const [recipeSearchResults, setRecipeSearchResults] = useState([]);
     const [pantryIngredients, setPantryIngredients] = useState(defaultPantry);
+    const _isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
 
     function handleIngredientChange(e) {
         setIngredient(e.target.value);
@@ -182,7 +196,7 @@ export default function Pantry() {
 
     function handleAddToPantry(e, ingredientToAdd) {
         e.preventDefault();
-        
+
         setPantryIngredients({
             ...pantryIngredients,
             [ingredientToAdd.id]: ingredientToAdd,
@@ -211,12 +225,18 @@ export default function Pantry() {
             />
             <RecipeSearch handleRecipeSearch={handleRecipeSearch} />
             <SearchResults
+                _isInPantry={_isInPantry}
                 handleAddToPantry={handleAddToPantry}
                 handleRemoveFromPantry={handleRemoveFromPantry}
                 pantryIngredients={pantryIngredients}
                 results={searchResults}
             />
-            <PantryIngredients pantryIngredients={pantryIngredients} />
+            <PantryIngredients
+                _isInPantry={_isInPantry}
+                handleAddToPantry={handleAddToPantry}
+                handleRemoveFromPantry={handleRemoveFromPantry}
+                pantryIngredients={pantryIngredients}
+            />
             {Object.keys(recipeSearchResults).length ? <hr /> : null}
             {JSON.stringify(recipeSearchResults)}
         </>
