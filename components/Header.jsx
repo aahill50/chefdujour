@@ -18,7 +18,7 @@ export default function Header() {
                     <Link href='/cookbook'>Cookbook</Link>
                 </li>
                 <li>
-                    <Link href='/shoppingList'>Shopping List</Link>
+                    <Link href='/shopping-list'>Shopping List</Link>
                 </li>
             </ul>
         </>
