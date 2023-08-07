@@ -7,14 +7,17 @@ import PantryIngredients from '../components/PantryIngredients';
 import RecipeSearch from '../components/RecipeSearch';
 import SearchResults from '../components/SearchResults';
 import usePantryIngredients from '../hooks/usePantryIngredients';
+import useShoppingList from '../hooks/useShoppingList';
 import styles from './pantry.module.css';
 
-export default function Pantry() {
+export default function PantryPage() {
     const [ingredient, setIngredient] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [recipeSearchResults, setRecipeSearchResults] = useState([]);
-    const {pantryIngredients, setPantryIngredients} = usePantryIngredients();
+    const { pantryIngredients, setPantryIngredients } = usePantryIngredients();
+    const { shoppingList, setShoppingList } = useShoppingList();
     const _isInPantry = (ingredient) => !!pantryIngredients[ingredient.id];
+    const _isInShoppingList = (ingredient) => !!shoppingList[ingredient.id];
 
     function handleIngredientChange(e) {
         setIngredient(e.target.value);
@@ -80,6 +83,15 @@ export default function Pantry() {
         });
     }
 
+    function handleAddToShoppingList(e, ingredientToAdd) {
+        e.preventDefault();
+
+        setShoppingList({
+            ...shoppingList,
+            [ingredientToAdd.id]: ingredientToAdd,
+        });
+    }
+
     function handleRemoveFromPantry(e, ingredient) {
         e.preventDefault();
 
@@ -92,6 +104,18 @@ export default function Pantry() {
         });
     }
 
+    function handleRemoveFromShoppingList(e, ingredient) {
+        e.preventDefault();
+
+        setShoppingList((s) => {
+            const {
+                [ingredient.id]: {},
+                ...shoppingList
+            } = s;
+            return { ...shoppingList };
+        });
+    }
+
     return (
         <>
             <h1>Pantry</h1>
@@ -100,7 +124,7 @@ export default function Pantry() {
                 handleIngredientChange={handleIngredientChange}
                 handleIngredientSearch={handleIngredientSearch}
             />
-            
+
             <SearchResults
                 _isInPantry={_isInPantry}
                 handleAddToPantry={handleAddToPantry}
@@ -112,10 +136,10 @@ export default function Pantry() {
                 _isInPantry={_isInPantry}
                 handleAddToPantry={handleAddToPantry}
                 handleRemoveFromPantry={handleRemoveFromPantry}
-                pantryIngredients={pantryIngredients}
+                _isInShoppingList={_isInShoppingList}
+                handleAddToShoppingList={handleAddToShoppingList}
+                handleRemoveFromShoppingList={handleRemoveFromShoppingList}
             />
-            {Object.keys(recipeSearchResults).length ? <hr /> : null}
-            {JSON.stringify(recipeSearchResults)}
         </>
     );
 }
