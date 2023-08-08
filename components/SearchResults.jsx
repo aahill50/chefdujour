@@ -1,14 +1,11 @@
 import Ingredient from './Ingredient';
 import ManagePantryIngredient from './ManagePantryIngredient';
+import { useStore } from '../store';
 import styles from '../pages/pantry.module.css';
 
-export default function SearchResults({
-    _isInPantry,
-    handleAddToPantry,
-    handleRemoveFromPantry,
-    pantryIngredients,
-    results = [],
-}) {
+export default function SearchResults({ results = [] }) {
+    const isInPantry = useStore((state) => state.isInPantry);
+
     return (
         <ul>
             {results.map((result) => {
@@ -16,7 +13,7 @@ export default function SearchResults({
                     <li
                         className={styles.searchResult}
                         key={
-                            _isInPantry(result)
+                            isInPantry(result)
                                 ? `in-pantry-${result.id}`
                                 : result.id
                         }
@@ -26,10 +23,8 @@ export default function SearchResults({
                             ingredient={result}
                         />
                         <ManagePantryIngredient
-                            handleAddToPantry={handleAddToPantry}
-                            handleRemoveFromPantry={handleRemoveFromPantry}
                             ingredient={result}
-                            isInPantry={_isInPantry(result)}
+                            isInPantry={isInPantry(result)}
                         />
                     </li>
                 );

@@ -1,14 +1,14 @@
+import { useCallback } from 'react';
+import { useStore } from '../store';
+import { getKey } from '../utils';
 import Ingredient from './Ingredient';
 import ManageShoppingListIngredient from './ManageShoppingListIngredient';
-import useShoppingList from '../hooks/useShoppingList';
 import styles from '../pages/pantry.module.css';
 
-export default function ShoppingList({
-    handleAddToShoppingList,
-    handleRemoveFromShoppingList,
-}) {
-    const { _isInShoppingList, shoppingList } = useShoppingList();
-    console.log('shopping list:', shoppingList);
+export default function ShoppingList() {
+    const shoppingList = useStore((state) => state.shoppingList);
+    const isInShoppingList = useStore((state) => state.isInShoppingList);
+
     return (
         <>
             <h2>Items on Shopping List:</h2>
@@ -16,29 +16,19 @@ export default function ShoppingList({
                 {Object.entries(shoppingList).map(
                     ([ingredientId, ingredient]) => {
                         return (
-                            <li key={ingredientId}>
+                            <li key={getKey(ingredient)}>
                                 <Ingredient
                                     classname={styles.ingredientImage}
                                     ingredient={ingredient}
                                 />
                                 <ManageShoppingListIngredient
-                                    handleAddToShoppingList={
-                                        handleAddToShoppingList
-                                    }
-                                    handleRemoveFromShoppingList={
-                                        handleRemoveFromShoppingList
-                                    }
                                     ingredient={ingredient}
-                                    isInShoppingList={_isInShoppingList(
-                                        ingredient
-                                    )}
                                 />
                             </li>
                         );
                     }
                 )}
             </ul>
-            {JSON.stringify(shoppingList)}
         </>
     );
 }
