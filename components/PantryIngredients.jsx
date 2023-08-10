@@ -4,32 +4,37 @@ import { getKey } from '../utils';
 import Ingredient from './Ingredient';
 import ManagePantryIngredient from './ManagePantryIngredient';
 import ManageShoppingListIngredient from './ManageShoppingListIngredient';
-import styles from '../pages/pantry.module.css';
 
 export default function PantryIngredients() {
     const pantry = useStore((state) => state.pantry);
-    const shoppingList = useStore((state) => state.shoppingList);
+    const unsub = useStore.subscribe((state) => state.shoppingList);
+    unsub();
 
     return (
         <>
             <h2>Items in Pantry:</h2>
-            <ul>
+            <ul className={`grid grid-cols-1 gap-4 max-w-md`}>
                 {Object.values(pantry).map((ingredient) => {
                     return (
-                        <li key={getKey(ingredient)}>
-                            <Ingredient
-                                classname={styles.ingredientImage}
-                                ingredient={ingredient}
-                            />
-                            <ManagePantryIngredient ingredient={ingredient} />
-                            <ManageShoppingListIngredient
-                                ingredient={ingredient}
-                            />
+                        <li
+                            key={getKey(ingredient)}
+                            className='grid grid-cols-5 bg-salmon rounded-xl shadow-lg hover:shadow-xl hover:cursor-pointer overflow-hidden'
+                        >
+                            <div className='col-span-4'>
+                                <Ingredient ingredient={ingredient} />
+                            </div>
+                            <div className='col-span-1'>
+                                <ManagePantryIngredient
+                                    ingredient={ingredient}
+                                />
+                                <ManageShoppingListIngredient
+                                    ingredient={ingredient}
+                                />
+                            </div>
                         </li>
                     );
                 })}
             </ul>
-            {JSON.stringify(pantry)}
         </>
     );
 }

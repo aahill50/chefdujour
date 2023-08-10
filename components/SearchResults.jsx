@@ -1,31 +1,30 @@
 import Ingredient from './Ingredient';
 import ManagePantryIngredient from './ManagePantryIngredient';
 import { useStore } from '../store';
-import styles from '../pages/pantry.module.css';
+import { getKey, subscribeToChanges } from '../utils';
+import ManageShoppingListIngredient from './ManageShoppingListIngredient';
 
-export default function SearchResults({ results = [] }) {
-    const isInPantry = useStore((state) => state.isInPantry);
+export default function SearchResults() {
+    const results = useStore((state) => state.ingredientSearchResults);
+    const unsub = subscribeToChanges(['pantry', 'shoppingList']);
+
+    // unsub();
 
     return (
-        <ul>
+        <ul className='grid grid-cols-1 gap-0 max-w-md'>
             {results.map((result) => {
                 return (
                     <li
-                        className={styles.searchResult}
-                        key={
-                            isInPantry(result)
-                                ? `in-pantry-${result.id}`
-                                : result.id
-                        }
+                        key={getKey(result)}
+                        className='grid grid-cols-5 odd:bg-white even:bg-stark-white hover:shadow-xl hover:cursor-pointer'
                     >
-                        <Ingredient
-                            classname={styles.ingredientImage}
-                            ingredient={result}
-                        />
-                        <ManagePantryIngredient
-                            ingredient={result}
-                            isInPantry={isInPantry(result)}
-                        />
+                        <div className='col-span-4'>
+                            <Ingredient ingredient={result} />
+                        </div>
+                        <div className='col-span-1'>
+                            <ManagePantryIngredient ingredient={result} />
+                            <ManageShoppingListIngredient ingredient={result} />
+                        </div>
                     </li>
                 );
             })}

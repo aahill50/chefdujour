@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 
 // pantry to use for testing!
 const defaultPantry = {
@@ -22,80 +23,80 @@ const defaultShoppingList = {
     1077: { id: 1077, name: 'milk', image: 'milk.png' },
 };
 
-export const useStore = create((set, get) => ({
-    cookbook: {},
-    pantry: { ...defaultPantry },
-    ingredientSearch: '',
-    ingredientSearchResults: [],
-    recipeSearch: '',
-    recipeSearchResults: [],
-    shoppingList: { ...defaultShoppingList },
-    isInCookbook: (recipe) => !!get().cookbook[recipe.id],
-    isInPantry: (ingredient) => !!get().pantry[ingredient.id],
-    isInShoppingList: (ingredient) => !!get().shoppingList[ingredient.id],
-    addToPantry: (ingredient) =>
-        set({
-            pantry: {
-                ...get().pantry,
-                [ingredient.id]: ingredient,
-            },
-        }),
-    addToShoppingList: (ingredient) =>
-        set({
-            shoppingList: {
-                ...get().shoppingList,
-                [ingredient.id]: ingredient,
-            },
-        }),
-    removeFromPantry: (ingredient) => {
-        const { [ingredient.id]: value, ...rest } = get().pantry;
-        return set({ pantry: rest });
-    },
-    removeFromShoppingList: (ingredient) => {
-        const { [ingredient.id]: value, ...rest } = get().shoppingList;
-        return set({ shoppingList: rest });
-    },
-    searchForIngredient: () => {
-        fetch(
-            `/api/search?queryType=ingredientSearch&ingredient=${
-                get().ingredientSearch
-            }`,
-            {
-                headers: {
-                    Accept: 'application/json',
+export const useStore = create(
+    subscribeWithSelector((set, get) => ({
+        cookbook: {},
+        pantry: { ...defaultPantry },
+        ingredientSearch: '',
+        ingredientSearchResults: [],
+        recipeSearch: '',
+        recipeSearchResults: [],
+        shoppingList: { ...defaultShoppingList },
+        isInCookbook: (recipe) => !!get().cookbook[recipe.id],
+        addToPantry: (ingredient) =>
+            set({
+                pantry: {
+                    ...get().pantry,
+                    [ingredient.id]: ingredient,
                 },
-            }
-        )
-            .then((res) => res.json())
-            .then((res) => {
-                get().setIngredientSearchResults(res.results);
-            });
-    },
-    searchForRecipe: () => {
-        const ingredientsString = Object.values(get().pantry)
-            .map((ingredient) => ingredient.name)
-            .join(',');
+            }),
+        addToShoppingList: (ingredient) =>
+            set({
+                shoppingList: {
+                    ...get().shoppingList,
+                    [ingredient.id]: ingredient,
+                },
+            }),
+        removeFromPantry: (ingredient) => {
+            const { [ingredient.id]: value, ...rest } = get().pantry;
+            return set({ pantry: rest });
+        },
+        removeFromShoppingList: (ingredient) => {
+            const { [ingredient.id]: value, ...rest } = get().shoppingList;
+            return set({ shoppingList: rest });
+        },
+        searchForIngredient: () => {
+            fetch(
+                `/api/search?queryType=ingredientSearch&ingredient=${
+                    get().ingredientSearch
+                }`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then((res) => {
+                    get().setIngredientSearchResults(res.results);
+                });
+        },
+        searchForRecipe: () => {
+            const ingredientsString = Object.values(get().pantry)
+                .map((ingredient) => ingredient.name)
+                .join(',');
 
-        fetch(
-            `/api/search?queryType=recipeSearchByIngredient&ingredients=${encodeURI(
-                ingredientsString
-            )}`,
-            {
-                headers: {
-                    Accept: 'application/json',
-                },
-            }
-        )
-            .then((res) => res.json())
-            .then((res) => {
-                get().setRecipeSearchResults(res);
-            });
-    },
-    setIngredientSearch: (ingredientSearch) => set({ ingredientSearch }),
-    setIngredientSearchResults: (ingredientSearchResults) =>
-        set({ ingredientSearchResults }),
-    setRecipeSearchResults: (recipeSearchResults) =>
-        set({
-            recipeSearchResults,
-        }),
-}));
+            fetch(
+                `/api/search?queryType=recipeSearchByIngredient&ingredients=${encodeURI(
+                    ingredientsString
+                )}`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then((res) => {
+                    get().setRecipeSearchResults(res);
+                });
+        },
+        setIngredientSearch: (ingredientSearch) => set({ ingredientSearch }),
+        setIngredientSearchResults: (ingredientSearchResults) =>
+            set({ ingredientSearchResults }),
+        setRecipeSearchResults: (recipeSearchResults) =>
+            set({
+                recipeSearchResults,
+            }),
+    }))
+);

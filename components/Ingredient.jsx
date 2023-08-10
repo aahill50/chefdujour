@@ -1,13 +1,16 @@
-import { ingredientImage } from '../utils';
+import { ingredientImage, toTitleCase } from '../utils';
 
-export default function Ingredient({ classname, ingredient }) {
+export default function Ingredient({ children, ingredient }) {
     return (
-        <div>
+        <div className='flex flex-row mx-6x  h-24 w-600 max-w-md'>
             <img
-                className={classname}
+                className={`p-2 bg-stark-white w-24 object-contain`}
                 src={ingredientImage(ingredient.image)}
             />
-            {ingredient.name}
+            <span className={`font-sans text-xl font-bold flex-1 ml-4 self-center`}>
+                {toTitleCase(ingredient.name)}
+            </span>
+            <div className={'flex-1'}>{children}</div>
         </div>
     );
 }
