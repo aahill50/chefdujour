@@ -1,21 +1,36 @@
 import { useStore } from '../store';
-import styles from '../pages/pantry.module.css';
+import { subscribeToChanges } from '../utils';
 
 export default function ManagePantryIngredient({ ingredient }) {
+    const pantry = useStore((state) => state.pantry);
     const addToPantry = useStore((state) => state.addToPantry);
     const removeFromPantry = useStore((state) => state.removeFromPantry);
-    const isInPantry = useStore((state) => state.isInPantry);
+
+    const unsub = subscribeToChanges(['shoppingList']);
+    unsub();
+
+    const handler = (e) =>
+        !!pantry[ingredient.id]
+            ? removeFromPantry(ingredient)
+            : addToPantry(ingredient);
+
+    const labelCopy = !pantry[ingredient.id] ? 'Add to Pantry' : 'In Pantry';
 
     return (
-        <button
-            className={styles.addToPantry}
-            onClick={(e) =>
-                isInPantry(ingredient)
-                    ? removeFromPantry(ingredient)
-                    : addToPantry(ingredient)
-            }
-        >
-            {isInPantry(ingredient) ? 'Remove from Pantry' : 'Add to Pantry'}
-        </button>
+        <div className='h-6 relative'>
+            <input
+                type='checkbox'
+                htmlFor={`manage-pantry-${ingredient.id}`}
+                onClick={handler}
+                className='rounded'
+                checked={!!pantry[ingredient.id] ? 'checked' : false}
+            />
+            <label
+                id={`manage-pantry-${ingredient.id}`}
+                className='text-sm ml-1'
+            >
+                {labelCopy}
+            </label>
+        </div>
     );
 }
