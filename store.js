@@ -25,6 +25,7 @@ const defaultShoppingList = {
 
 export const useStore = create(
     subscribeWithSelector((set, get) => ({
+        activeTab: null,
         cookbook: {},
         pantry: { ...defaultPantry },
         ingredientSearch: '',
@@ -98,5 +99,6 @@ export const useStore = create(
             set({
                 recipeSearchResults,
             }),
+        setActiveTab: (activeTab) => set({ activeTab }),
     }))
 );

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import clsx from 'clsx';
 import { useStore } from '../store';
 import { getKey } from '../utils';
 import Ingredient from './Ingredient';
@@ -13,17 +13,40 @@ export default function PantryIngredients() {
     return (
         <>
             <h2>Items in Pantry:</h2>
-            <ul className={`grid grid-cols-1 gap-4 max-w-md`}>
+            <ul className={clsx('grid', 'grid-cols-1', 'gap-8d', 'max-w-lg')}>
                 {Object.values(pantry).map((ingredient) => {
                     return (
                         <li
                             key={getKey(ingredient)}
-                            className='grid grid-cols-5 bg-salmon rounded-xl shadow-lg hover:shadow-xl hover:cursor-pointer overflow-hidden'
-                        >
-                            <div className='col-span-4'>
+                            className={clsx(
+                                'grid',
+                                'grid-cols-6',
+                                'hover:cursor-pointer',
+                                'h-16'
+                                )}
+                                >
+                            <div
+                                className={clsx(
+                                    'bg-white',
+                                    'col-span-4',
+                                    'border-teal',
+                                    'first:border-t',
+                                    'border-b',
+                                    'border-r',
+                                    'border-l'
+                                )}
+                            >
                                 <Ingredient ingredient={ingredient} />
                             </div>
-                            <div className='col-span-1'>
+                            <div
+                                className={clsx(
+                                    'col-span-2',
+                                    'flex',
+                                    'flex-col',
+                                    'pl-2',
+                                    'self-center'
+                                )}
+                            >
                                 <ManagePantryIngredient
                                     ingredient={ingredient}
                                 />
