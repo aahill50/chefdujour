@@ -3,6 +3,7 @@ const noop = () => {};
 const apiImgRoot = 'https://spoonacular.com/cdn/ingredients_100x100';
 
 const ingredientImage = (ingredient) => `${apiImgRoot}/${ingredient}`;
+
 const getKey = (ingredient) => {
     const pantry = useStore.getState().pantry;
     const shoppingList = useStore.getState().shoppingList;

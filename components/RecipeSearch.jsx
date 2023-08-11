@@ -1,4 +1,5 @@
 import { useStore } from '../store';
+import Recipe from './Recipe';
 
 export default function RecipeSearch() {
     const searchForRecipe = useStore((state) => state.searchForRecipe);
@@ -9,9 +10,11 @@ export default function RecipeSearch() {
             <button onClick={searchForRecipe}>
                 Search for recipes based on your ingredients!
             </button>
-            <ul>
-                {JSON.stringify(recipeSearchResults)}
-            </ul>
+            {recipeSearchResults.length
+                ? recipeSearchResults.map((result) => (
+                      <Recipe recipe={result} />
+                  ))
+                : null}
         </>
     );
 }

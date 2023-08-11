@@ -17,7 +17,6 @@ export default function PantryPage() {
                 'rounded-tl-none'
             )}
         >
-            <h1>Pantry</h1>
             <IngredientSearch />
             <SearchResults />
             <PantryIngredients />
