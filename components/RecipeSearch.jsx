@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useStore } from '../store';
 import Recipe from './Recipe';
 
@@ -6,15 +7,26 @@ export default function RecipeSearch() {
     const recipeSearchResults = useStore((state) => state.recipeSearchResults);
 
     return (
-        <>
-            <button onClick={searchForRecipe}>
-                Search for recipes based on your ingredients!
+        <div className=''>
+            <button
+                className={clsx(
+                    'bg-teal',
+                    'p-6',
+                    'my-6',
+                    'rounded-lg',
+                    'text-center',
+                    'text-white'
+                )}
+                onClick={searchForRecipe}
+            >
+                Find recipes based on your ingredients!
             </button>
             {recipeSearchResults.length
                 ? recipeSearchResults.map((result) => (
                       <Recipe recipe={result} />
                   ))
                 : null}
-        </>
+            {/* {JSON.stringify(recipeSearchResults)} */}
+        </div>
     );
 }

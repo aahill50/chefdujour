@@ -408,6 +408,7 @@ export const useStore = create(
         pantry: { ...defaultPantry },
         ingredientSearch: '',
         ingredientSearchResults: [],
+        recipeInfo: {},
         recipeSearch: '',
         recipeSearchResults: [],
         shoppingList: { ...defaultShoppingList },
@@ -425,6 +426,17 @@ export const useStore = create(
                     [ingredient.id]: ingredient,
                 },
             }),
+        getRecipeInfo: (recipeId) => {
+            fetch(`/api/search?queryType=recipeInfo&recipeId=${recipeId}`, {
+                headers: {
+                    Accept: 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    get().setRecipeInfo(res);
+                });
+        },
         removeFromPantry: (ingredient) => {
             const { [ingredient.id]: value, ...rest } = get().pantry;
             return set({ pantry: rest });
@@ -472,6 +484,7 @@ export const useStore = create(
         setIngredientSearch: (ingredientSearch) => set({ ingredientSearch }),
         setIngredientSearchResults: (ingredientSearchResults) =>
             set({ ingredientSearchResults }),
+        setRecipeInfo: (recipeInfo) => set({ recipeInfo }),
         setRecipeSearchResults: (recipeSearchResults) =>
             set({
                 recipeSearchResults,

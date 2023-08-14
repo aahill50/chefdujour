@@ -11,6 +11,7 @@ export default function Cookbook() {
             className={clsx(
                 'bg-celadon',
                 'min-h-full',
+                'w-full',
                 'p-6',
                 'border-2',
                 'border-teal',
@@ -20,7 +21,9 @@ export default function Cookbook() {
             )}
         >
             <RecipeSearch />
-            {Object.values(cookbook).map(recipe => <Recipe recipe={recipe} />)}
+            {Object.values(cookbook).map((recipe) => (
+                <Recipe recipe={recipe} />
+            ))}
         </div>
     );
 }
