@@ -1,21 +1,16 @@
-import { useStore } from "../store";
+import { useStore } from '../store';
+import debounce from 'lodash.debounce';
 
-export default function IngredientSearch() {
-    const ingredientSearch = useStore(state => state.ingredientSearch);
-    const setIngredientSearch = useStore(state => state.setIngredientSearch);
-    const searchForIngredient = useStore(state => state.searchForIngredient);
-
+export default function IngredientSearch({ onChange, placeholder }) {
     return (
-        <>
+        <div className='mb-6'>
             <input
+                className='rounded-lg w-full'
                 type='text'
                 name='ingredient'
-                value={ingredientSearch}
-                onChange={e => setIngredientSearch(e.target.value)}
+                onChange={onChange}
+                placeholder={placeholder}
             />
-            <button onClick={searchForIngredient}>
-                Search for ingredient
-            </button>
-        </>
+        </div>
     );
 }

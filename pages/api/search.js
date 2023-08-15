@@ -36,7 +36,8 @@ function getRecipeSearchParams(params) {
 }
 
 function getUrlByQueryType(queryType, params) {
-    const { ingredient, ingredientId, ingredients, recipeSearch } = params;
+    const { recipeId, ingredient, ingredientId, ingredients, recipeSearch } =
+        params;
     switch (queryType) {
         case 'ingredientDetail':
             return `${apiRoot}/food/ingredients/${ingredientId}/information`;
@@ -48,6 +49,8 @@ function getUrlByQueryType(queryType, params) {
             return `${apiRoot}/recipes/complexSearch/?query=${recipeSearch}&${getRecipeSearchParams(
                 params
             )}`;
+        case 'recipeInfo':
+            return `${apiRoot}/recipes/${recipeId}/information`;
     }
 }
 
