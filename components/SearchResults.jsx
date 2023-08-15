@@ -1,33 +1,87 @@
+import clsx from 'clsx';
 import Ingredient from './Ingredient';
-import ManagePantryIngredient from './ManagePantryIngredient';
 import { useStore } from '../store';
 import { getKey, subscribeToChanges } from '../utils';
-import ManageShoppingListIngredient from './ManageShoppingListIngredient';
 
-export default function SearchResults() {
+export default function SearchResults({ onClickIngredient }) {
     const results = useStore((state) => state.ingredientSearchResults);
+    const setIngredientSearchResults = useStore(
+        (state) => state.setIngredientSearchResults
+    );
     const unsub = subscribeToChanges(['pantry', 'shoppingList']);
 
-    // unsub();
+    unsub();
 
-    return (
-        <ul className='grid grid-cols-1 gap-0 max-w-md'>
+    const hasResults = !!results.length;
+
+    const onCloseSearchResults = (e) => {
+        setIngredientSearchResults([]);
+    };
+
+    return hasResults ? (
+        <ul
+            className={clsx(
+                { 'p-2': hasResults },
+                { 'pt-6': hasResults },
+                { 'border-2': hasResults },
+                'flex',
+                'flex-wrap',
+                'relative',
+                'shadow-2xl',
+                'bg-stark-white',
+                'rounded-lg',
+                'border-teal',
+                'z-10',
+                'mb-4'
+            )}
+        >
+            <button
+                role='close'
+                className={clsx(
+                    'absolute',
+                    'right-2',
+                    'top-0',
+                    'text-3xl',
+                    'font-mono',
+                    'font-bold'
+                )}
+                onClick={onCloseSearchResults}
+            >
+                x
+            </button>
             {results.map((result) => {
                 return (
                     <li
                         key={getKey(result)}
-                        className='grid grid-cols-5 odd:bg-white even:bg-stark-white hover:shadow-xl hover:cursor-pointer'
+                        className={clsx('flex', 'hover:cursor-pointer', 'm-1')}
+                        onClick={(e) => onClickIngredient(result)}
                     >
-                        <div className='col-span-4'>
+                        <div
+                            className={clsx(
+                                'bg-white',
+                                'col-span-4',
+                                'border-teal',
+                                'first:border-t',
+                                'border-b',
+                                'border-r',
+                                'border-l',
+                                'overflow-hidden',
+                                'rounded-full'
+                            )}
+                        >
                             <Ingredient ingredient={result} />
                         </div>
-                        <div className='col-span-1'>
-                            <ManagePantryIngredient ingredient={result} />
-                            <ManageShoppingListIngredient ingredient={result} />
-                        </div>
+                        <div
+                            className={clsx(
+                                'col-span-2',
+                                'flex',
+                                'flex-col',
+                                'self-center'
+                            )}
+                        ></div>
                     </li>
                 );
             })}
         </ul>
-    );
+    ) : null;
 }
