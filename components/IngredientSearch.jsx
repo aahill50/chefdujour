@@ -1,6 +1,3 @@
-import { useStore } from '../store';
-import debounce from 'lodash.debounce';
-
 export default function IngredientSearch({ onChange, placeholder }) {
     return (
         <div className='mb-6'>

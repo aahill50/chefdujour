@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Login from '../components/Login';
 
-export default function Homepage() {
+export default function HomePage() {
 
     return (
         <div

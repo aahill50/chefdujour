@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 const apiRoot = 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com';
 
 function getRecipeSearchParams(params) {
