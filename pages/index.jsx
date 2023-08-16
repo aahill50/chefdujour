@@ -1,6 +1,8 @@
 import clsx from 'clsx';
+import Login from '../components/Login';
 
 export default function Homepage() {
+
     return (
         <div
             className={clsx(
@@ -14,7 +16,8 @@ export default function Homepage() {
                 'rounded-tl-none'
             )}
         >
-            Welcome to Chef Du Jour
+            <div>Welcome to Chef Du Jour</div>
+            <Login />
         </div>
     );
 }
