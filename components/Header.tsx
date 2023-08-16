@@ -1,11 +1,11 @@
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
+import clsx from 'clsx';
 import { useStore } from '../store';
 
-export default function Header({ getPageProps }) {
+export default function Header() {
     const setActiveTab = useStore((state) => state.setActiveTab);
     const activeTab = useStore((state) => state.activeTab);
     const { pathname } = useRouter();

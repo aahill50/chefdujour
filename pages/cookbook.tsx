@@ -3,7 +3,7 @@ import RecipeSearch from '../components/RecipeSearch';
 import clsx from 'clsx';
 import Recipe from '../components/Recipe';
 
-export default function Cookbook() {
+export default function CookbookPage() {
     const cookbook = useStore((state) => state.cookbook);
 
     return (
