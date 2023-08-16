@@ -1,7 +1,15 @@
 import clsx from 'clsx';
 import { ingredientImage, toTitleCase } from '../utils';
+import { ReactNode } from 'react';
+import { IngredientType } from '../types';
 
-export default function Ingredient({ children, ingredient }) {
+export default function Ingredient({
+    children,
+    ingredient,
+}: {
+    children?: ReactNode;
+    ingredient: IngredientType;
+}) {
     return ingredient ? (
         <div className='flex flex-row mx-6x  h-12 w-600 max-w-md'>
             <img

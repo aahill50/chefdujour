@@ -2,8 +2,7 @@ import clsx from 'clsx';
 import Login from '../components/Login';
 
 export default function HomePage() {
-
-    return (
+        return (
         <div
             className={clsx(
                 'bg-celadon',

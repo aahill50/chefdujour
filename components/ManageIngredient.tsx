@@ -5,9 +5,10 @@ export default function ManageIngredient({ ingredient, onClick }) {
     return (
         <div className='bg-stark-white flex rounded-full p-1 mx-2'>
             <Image
+                alt={ingredient.name}
                 className='h-4 w-4 self-end align-self-end'
                 src={xMark}
-                onClick={e => onClick(ingredient)}
+                onClick={(e) => onClick(ingredient)}
             />
         </div>
     );

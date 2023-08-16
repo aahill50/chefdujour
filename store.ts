@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { StoreType } from './types';
 
 // pantry to use for testing!
 const defaultPantry = {
@@ -401,15 +402,15 @@ const defaultCookbook = {
         likes: 10,
     },
 };
-export const useStore = create(
+
+export const useStore = create<StoreType>()(
     subscribeWithSelector((set, get) => ({
         activeTab: null,
         cookbook: { ...defaultCookbook },
         pantry: { ...defaultPantry },
         ingredientSearch: '',
         ingredientSearchResults: [],
-        recipeInfo: {},
-        recipeSearch: '',
+        recipeInfo: null,
         recipeSearchResults: [],
         shoppingList: { ...defaultShoppingList },
         addToPantry: (ingredient) =>
@@ -481,6 +482,7 @@ export const useStore = create(
                     get().setRecipeSearchResults(res);
                 });
         },
+        setActiveTab: (activeTab) => set({ activeTab }),
         setIngredientSearch: (ingredientSearch) => set({ ingredientSearch }),
         setIngredientSearchResults: (ingredientSearchResults) =>
             set({ ingredientSearchResults }),
@@ -489,6 +491,5 @@ export const useStore = create(
             set({
                 recipeSearchResults,
             }),
-        setActiveTab: (activeTab) => set({ activeTab }),
     }))
 );
