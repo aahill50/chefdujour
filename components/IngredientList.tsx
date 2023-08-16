@@ -1,8 +1,15 @@
 import clsx from 'clsx';
 import { getKey } from '../utils';
 import Ingredient from './Ingredient';
+import { IngredientType, PantryType } from '../types';
+import { ReactNode } from 'react';
 
-export default function IngredientList({ ingredients, renderChild }) {
+type Props = {
+    ingredients: PantryType;
+    renderChild: (ingredient: IngredientType) => ReactNode;
+};
+
+export default function IngredientList({ ingredients, renderChild }: Props) {
     return (
         <>
             <ul className={clsx('flex', 'flex-wrap')}>

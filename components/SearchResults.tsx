@@ -12,6 +12,8 @@ export default function SearchResults({ onClickIngredient }) {
 
     unsub();
 
+    console.log('results:', results)
+
     const hasResults = !!results.length;
 
     const onCloseSearchResults = (e) => {

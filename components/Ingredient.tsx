@@ -1,8 +1,16 @@
 import clsx from 'clsx';
 import { ingredientImage, toTitleCase } from '../utils';
+import { ReactNode } from 'react';
+import { IngredientType } from '../types';
 
-export default function Ingredient({ children, ingredient }) {
-    return (
+export default function Ingredient({
+    children,
+    ingredient,
+}: {
+    children?: ReactNode;
+    ingredient: IngredientType;
+}) {
+    return ingredient ? (
         <div className='flex flex-row mx-6x  h-12 w-600 max-w-md'>
             <img
                 className={clsx(
@@ -16,7 +24,7 @@ export default function Ingredient({ children, ingredient }) {
             <span className={`font-sans w-autoflex-1 mx-4 self-center`}>
                 {toTitleCase(ingredient.name)}
             </span>
-            <div className='self-center'>{children}</div>
+            {children ? <div className='self-center'>{children}</div> : null}
         </div>
-    );
+    ) : null;
 }
