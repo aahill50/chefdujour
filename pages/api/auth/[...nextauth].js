@@ -3,8 +3,13 @@
 
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const authOptions = {
+    adapter: PrismaAdapter(prisma),
     callbacks: {
         async jwt({ token, account }) {
             // Persist the OAuth access_token to the token right after signin
@@ -15,7 +20,6 @@ export const authOptions = {
         },
         async session({ session, token, user }) {
             // Send properties to the client, like an access_token from a provider.
-            console.log('session:', session);
             session.accessToken = token.accessToken;
             return session;
         },
@@ -27,5 +31,8 @@ export const authOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
     ],
+    session: {
+        strategy: 'jwt',
+    },
 };
 export default NextAuth(authOptions);
